@@ -1,0 +1,13 @@
+Name, Age, City
+
+John Doe, 28, New York
+
+Jane Smith, 34, Los Angeles
+
+Bob Johnson, 45, Chicago
+
+
+Alice Williams, 29, Houston
+
+
+Chris Evans, 31, Phoenix

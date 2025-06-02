@@ -1,0 +1,5 @@
+Python is a powerful programming language.
+It is widely used in web development, data science, and automation.
+Python’s simplicity and readability make it a popular choice.
+Many developers enjoy using Python for its extensive libraries.
+File handling is one of the essential features in Python.
