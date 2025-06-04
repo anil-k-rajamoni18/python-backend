@@ -383,3 +383,64 @@ Problem: Two modules import each other, leading to crashes or unexpected behavio
 Fix:
 - Restructure code to avoid tight coupling
 - Use late imports (inside functions) if restructuring is not feasible
+
+---
+
+## HandsOn Projects 
+**Task Manager CLI**
+- Develeop command-line project management app where users can create projects and add/view/update/delete tasks inside each project. 
+- Each project stores tasks in a separate JSON file.
+
+```python
+task_manager/
+│
+├── main.py
+├── projects/
+│   └── <project_name>.json      # Dynamic JSON storage per project
+│
+├── core/                        # Main package
+│   ├── __init__.py
+│   ├── manager.py               # CLI interaction
+│   └── validator.py             # Input validation functions
+│
+├── data/                        # Data handling package
+│   ├── __init__.py
+│   └── file_ops.py              # Read/write JSON
+│
+└── utils/
+    ├── __init__.py
+    └── date_tools.py            # Format/parse dates
+```
+
+**✨ Key Features:**
+- Add a project
+- Add tasks to a project
+- View all tasks
+- Mark task as completed
+- Delete a task
+- Data is stored in per-project JSON files
+
+
+---
+**Personal Expense Tracker (CLI-based)**
+- Build a command-line expense tracker where users can add, view, delete, and summarize their expenses. 
+- It stores data in a local CSV file and uses built-in modules like csv, datetime, and os.
+
+```python
+expense_tracker/
+│
+├── main.py                   # Main CLI entry point
+├── data/
+│   └── storage.csv           # CSV to store expenses
+│
+├── utils/
+│   ├── __init__.py
+│   ├── file_manager.py       # File handling logic
+│   └── helpers.py            # Date parsing, formatting, etc.
+│
+└── features/
+    ├── __init__.py
+    ├── add_expense.py        # Function to add expense
+    ├── view_expenses.py      # Function to list expenses
+    └── summary.py            # Function to show summary (monthly, category-wise)
+```
