@@ -1,38 +1,58 @@
-import sys
-import math
+from pathlib import Path
 
-# 1. sys.argv - Command-line arguments
-print("Command-line arguments (sys.argv):", sys.argv)
+# 1. Create a Path object (relative)
+file_path = Path("demo_folder") / "example.txt"
 
-# 2. sys.exit - Uncomment to exit the program early
-# sys.exit("Exiting program.")
+print(file_path)
 
-# 3. sys.path - Module search paths
-print("Module search paths (sys.path):", sys.path[:2])  # Show only first 2 for brevity
+# # 2. Create a directory (if it doesn't exist)
+file_path.parent.mkdir(exist_ok=True)
+print(f"Created folder: {file_path.parent}")
 
-# 4. sys.platform - Detect OS platform
-print("Platform (sys.platform):", sys.platform)
+# # 3. Write text to the file
+file_path.write_text("Hello from pathlib!")
+print(f"Written to file: {file_path}")
 
-# 5. sys.version / sys.version_info - Python version
-print("Python version (sys.version):", sys.version)
-print("Version info (sys.version_info):", sys.version_info)
+# # 4. Read the file content
+content = file_path.read_text()
+print("File content:", content)
 
-# 6. sys.stdin, sys.stdout, sys.stderr - Standard I/O streams
-sys.stdout.write("Writing to standard output using sys.stdout.write\n")
+# # 5. Check if the file and folder exist
+print("File exists:", file_path.exists())
+print("Is file:", file_path.is_file())
+print("Is directory:", file_path.parent.is_dir())
 
-# 7. sys.getsizeof - Size of an object in bytes
-sample_string = "Hello, sys!"
-print(f"Size of '{sample_string}' (sys.getsizeof):", sys.getsizeof(sample_string), "bytes")
+# # 6. Show file parts
+print("File name:", file_path.name)
+print("File suffix (extension):", file_path.suffix)
+print("File stem:", file_path.stem)
+print("Parent directory:", file_path.parent.resolve())
 
-# 8. sys.modules - List loaded modules
-print("Is 'math' module loaded? ('math' in sys.modules):", 'math' in sys.modules)
+# # 7. File metadata
+print("File size:", file_path.stat().st_size, "bytes")
 
-# 9. sys.maxsize - Maximum size of a Python int
-print("Maximum integer size (sys.maxsize):", sys.maxsize)
+# # 8. List all .txt files in the folder
+print("\nText files in folder:")
+for txt in file_path.parent.glob("*.txt"):
+    print("-", txt.name)
 
-# 10. sys.exc_info - Exception information
-try:
-    1 / 0
-except:
-    exc_type, exc_value, exc_traceback = sys.exc_info()
-    print("Exception info (sys.exc_info):", exc_type, exc_value)
+# # 9. Rename the file
+new_file_path = file_path.with_name("renamed_example.txt")
+file_path.rename(new_file_path)
+print(f"\nFile renamed to: {new_file_path.name}")
+
+# # 10. Create another file and write something
+extra_file = file_path.parent / "extra.txt"
+extra_file.write_text("Another file.")
+print("Created extra file.")
+
+# # 11. Recursively list all .txt files
+# print("\nAll .txt files (recursive):")
+# for txt in file_path.parent.rglob("*.txt"):
+#     print("-", txt.relative_to(file_path.parent))
+
+# # 12. Cleanup: Delete files and directory
+extra_file.unlink()
+new_file_path.unlink()
+file_path.parent.rmdir()
+print("\nCleanup complete.")
