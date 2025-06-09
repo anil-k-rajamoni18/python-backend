@@ -255,6 +255,12 @@ my_package/
 ├── __init__.py
 ├── math_utils.py
 ├── string_utils.py
+└── test.py
+
+my_testpackage/
+├── __init__.py
+└── main.py
+
 ```
 
 ---
@@ -326,6 +332,31 @@ from my_package.math_utils import add
 # Inside string_utils.py
 from .math_utils import add
 ```
+
+**Option 1: Run main.py as a script from the project root**
+```bash
+python -m my_testpackage.main
+```
+
+**Option 2: Add the parent directory (project_root) to sys.path manually in main.py**
+```bash
+python my_testpackage/main.py
+```
+
+- main.py
+```python
+import sys
+import os
+
+# Add project root to the path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from my_package.math_utils import add
+
+result = add(5, 3)
+print(f"The result is: {result}")
+```
+
 ---
 
 ### 📦 Distributing a Package
