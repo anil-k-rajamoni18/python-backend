@@ -1,3 +1,4 @@
-from my_package import math_utils
+from my_package.math_utils import add
 
-print(math_utils.add(10,20))
+result = add(3, 5)
+print(f"The result is: {result}")
