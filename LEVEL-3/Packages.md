@@ -7,15 +7,17 @@
 --- 
 ## **Importance & Usage**
 **✅ Why it's important:**
-    - Dependency Isolation: Keeps project dependencies separate.
-    - Version Control: Avoids version conflicts across projects.
-    - Cleaner Development: Reduces risk of breaking global packages.
-    - Portability: Makes it easier to share projects (via requirements.txt).
+
+- Dependency Isolation: Keeps project dependencies separate.
+- Version Control: Avoids version conflicts across projects.
+- Cleaner Development: Reduces risk of breaking global packages.
+- Portability: Makes it easier to share projects (via requirements.txt).
 
 **🛠️ When to use:**
-    - Every time you start a new Python project.
-    - When working on multiple projects with different package requirements.
-    - In collaborative development to ensure consistent environments.
+
+- Every time you start a new Python project.
+- When working on multiple projects with different package requirements.
+- In collaborative development to ensure consistent environments.
 
 ---
 
@@ -86,6 +88,7 @@ conda activate myenv
 
 🔹 Reinstall a package from scratch:
  - pip install --force-reinstall flask
+ 
 🔹 Use a private package index:
  - pip install mypackage --index-url https://mypackage.repo/simple
 
@@ -343,6 +346,7 @@ setup(
 ```
 
 **✅ Best Practices**
+
 - Always include __init__.py in packages.
 - Use clear and consistent naming.
 - Use absolute imports for clarity.
