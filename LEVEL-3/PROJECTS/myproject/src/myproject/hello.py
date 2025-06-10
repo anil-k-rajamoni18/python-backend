@@ -1,1 +1,1 @@
-print("Hello Peotry package manager...")
+print("Hello Poetry package manager...")
