@@ -323,7 +323,7 @@ CREATE TABLE employees (
 
 ```
 
-** 2. SHOW TABLES**
+**2. SHOW TABLES**
 - Lists all tables in the selected database.
 ```sql
 SHOW TABLES;
@@ -389,3 +389,9 @@ SELECT * FROM employees WHERE hire_date < '2015-01-01';
 ```sql
 SHOW CREATE TABLE employees;
 ```
+
+--- 
+
+## 🔐 Constraints in MySQL
+- Constraints in MySQL are rules applied to table columns to enforce data integrity, accuracy, and consistency. 
+- They limit the type of data that can go into a table.

@@ -90,8 +90,8 @@ class BankAccount:
 Real-life Example:
 
 **Real-life Example:**
-    - Car Driving: You turn the key or push a button to start the engine, without needing to know how the fuel system, battery, and ignition work together.
 
+    - Car Driving: You turn the key or push a button to start the engine, without needing to know how the fuel system, battery, and ignition work together.
     - TV Remote: Pressing a button changes the channel, but you don’t see how signals are processed inside.
 
 
@@ -100,16 +100,16 @@ Real-life Example:
 
 **Real-life Example:**
 
-    - Family Hierarchy: A child inherits features from parents — like eye color or last name.
-
-    - Vehicle Types: All vehicles (bikes, cars, trucks) inherit basic characteristics from a common vehicle category (like having wheels, engine, etc.).
+- Family Hierarchy: A child inherits features from parents — like eye color or last name.
+- Vehicle Types: All vehicles (bikes, cars, trucks) inherit basic characteristics from a common vehicle category (like having wheels, engine, etc.).
 
 **4. `Polymorphism`**
 - The ability of different classes to be treated as instances of the same class through a common interface, with each responding differently.
 
 **Real-life Example:**
-    - Same Button, Different Action: In a media player, pressing the "play" button could play music, a video, or a podcast, depending on context.
-    - Animal Sounds: All animals have a "make sound" action, but a dog barks, a cat meows, and a cow moos.
+
+- Same Button, Different Action: In a media player, pressing the "play" button could play music, a video, or a podcast, depending on context.
+- Animal Sounds: All animals have a "make sound" action, but a dog barks, a cat meows, and a cow moos.
 
 ---
 
@@ -229,6 +229,7 @@ print(p1.name)
 
 ### 🧩 Types of Constructors
 - Python supports mainly one constructor per class (__init__), but conceptually we can think of these types:
+
 | Type                          | Description                                                                                      |
 | ----------------------------- | ------------------------------------------------------------------------------------------------ |
 | **Default Constructor**       | No parameters except `self`. Used when no arguments are passed.                                  |
