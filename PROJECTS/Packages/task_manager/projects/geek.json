@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Explore AI Agent",
+    "due_date": "2025-07-01",
+    "created_at": "2025-06-10",
+    "done": false
+  },
+  {
+    "title": "Read Spring AI Docs",
+    "due_date": "2025-06-25",
+    "created_at": "2025-06-10",
+    "done": true
+  }
+]
