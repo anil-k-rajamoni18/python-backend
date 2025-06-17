@@ -1,22 +1,18 @@
-class Person:
-    '''
-        This is Person Class create object by taking name and age
-    '''
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
+class A:
+    def greet(self):
+        print("Hello from A")
 
-    def __eq__(self, other):
-        if isinstance(other, Person):
-            return self.name == other.name and self.age == other.age
-        return False
-    
-    def __repr__(self):
-        return f"Person(name={self.name!r}, age={self.age!r})"
+class B(A):
+    def greet(self):
+        print("Hello from B")
 
-p = Person("Alice", 30)
-print(p.__dict__)  # {'name': 'Alice', 'age': 30}
-print(p.__class__) # <class '__main__.Person'>
-print(Person.__doc__) # Prints class docstring if available
+class C(A):
+    def greet(self):
+        print("Hello from C")
 
-print(dict.__doc__)
+class D(B, C):
+    pass
+
+d = D()
+d.greet()
+print(D.mro())
