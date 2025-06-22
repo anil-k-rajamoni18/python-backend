@@ -426,6 +426,7 @@ int result = (10 + 2) * 5;
 
 **Associativity**
 - When operators have the same precedence, associativity determines the direction of evaluation:
+
 | Type                | Associativity |
 | ------------------- | ------------- |
 | Most Binary Ops     | Left to Right |

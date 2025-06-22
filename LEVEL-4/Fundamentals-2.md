@@ -69,11 +69,11 @@ import mypackage.MyClass;
 1. Download the .jar file.
 2. Compile with:
 ```bash
-javac -cp .:library.jar MyProgram.java
+javac -cp path/library.jar MyProgram.java
 ```
 3. Run with:
 ```bash
-java -cp .:library.jar MyProgram
+java -cp path/library.jar MyProgram
 ```
 
 - In IDEs (e.g., IntelliJ, Eclipse): Add JARs via "Project Structure" or "Build Path".
