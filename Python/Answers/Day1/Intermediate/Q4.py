@@ -1,0 +1,12 @@
+a=5
+b=10
+c=8
+temp1=b
+temp2=c
+b=a
+c=temp1
+a=temp2
+print(f"""a:{a}
+b:{b}
+c:{c}
+""")
