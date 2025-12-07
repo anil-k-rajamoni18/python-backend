@@ -1,8 +1,5 @@
 # 🚀 DAY 9 — API Development with FastAPI
 
-Covers full FastAPI fundamentals to advanced, including Pydantic, Dependency Injection, CRUD, SQLite integration, validation, and building a Task Manager REST API.
-
----
 
 ## 📌 1. Introduction to FastAPI
 
