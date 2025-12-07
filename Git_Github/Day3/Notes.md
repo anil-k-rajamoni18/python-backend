@@ -133,21 +133,284 @@ During release crunch time, merge conflicts are frequent—engineers must resolv
 
 # 🔄 **7. Git Merge vs Rebase (Intro)**
 
-## **Merge**
+# 🔥 1. Git Merge vs Git Rebase — Real-Time Understanding
 
-* Keeps history intact
-* Creates a merge commit
-* Good for collaborative teams
+---
 
-## **Rebase**
+## 🟦 git merge
 
-* Rewrites history
-* Creates a clean, linear commit timeline
+### 📌 What it does:
+- Combines two branches
+- Creates a new merge commit
+- Does not rewrite history
 
-### Example
+### 🧠 When you use it:
+- When you want to keep a clear history of how branches diverged
+- When collaborating with multiple developers
+
+### 📘 Example (Real-Time Scenario)
+
+You are working on a feature branch:
+
+```
+main ----A----B
+              \
+               C----D (feature)
+```
+
+Your teammate updated `main`:
+
+```
+main ----A----B----E----F
+```
+
+You run:
+
+```bash
+git checkout feature
+git merge main
+```
+
+New Git history:
+
+```
+main ----A----B----E----F
+              \         \
+               C----D----M (merge commit)
+```
+
+### ⭐ Used when:
+- Team projects
+- You don't want to rewrite commit history
+- You want a clear and traceable timeline
+
+---
+
+## 🟧 git rebase
+
+### 📌 What it does:
+- Moves your branch on top of another branch
+- Rewrites commit history
+- Makes linear history
+
+### 🧠 When you use it:
+- When you want a clean history
+- Before merging PRs
+- When you're the only developer modifying the branch
+
+### 📘 Example (Same Scenario but with rebase)
+
+```bash
+git checkout feature
+git rebase main
+```
+
+Feature branch commits are "replayed" on top of `main`.
+
+New history:
+
+```
+main ----A----B----E----F----C'----D'
+```
+
+(' means new commit IDs)
+
+### ⭐ Used when:
+- To keep history clean
+- Before creating a Pull Request
+- When working alone on a branch
+
+---
+
+## 🎯 Real-Time Analogy
+
+| Command | Analogy |
+|---------|---------|
+| **merge** | "Add your pages to the existing story as a new chapter." |
+| **rebase** | "Rewrite your chapter so it looks like you wrote it after the latest chapter." |
+
+---
+
+## ⚠️ Golden Rule (Interview Must-Say)
+
+> 👉 **NEVER rebase on a public/shared branch**  
+> Because it rewrites history → breaks teammates' workflows.
+
+---
+
+# 🔥 2. git revert — Safest Way to Undo (Creates a New Commit)
+
+---
+
+## 🟩 git revert
+
+### 📌 What it does:
+- Undoes a commit by creating a new opposite commit
+- Does not change history
+- Safe for shared branches like `main`
+
+### 📘 Real-Time Example
+
+Someone pushed a bad commit to `main`:
+
+```
+Commit 10: Removed production config by mistake
+```
+
+You want to undo it.
+
+```bash
+git revert <commit-hash>
+```
+
+Git creates a new commit:
+
+```
+Commit 11: Revert "Removed production config"
+```
+
+### ⭐ When used:
+- Undo mistakes on shared branches
+- Production fixes
+- When you must preserve history
+
+### 🔥 Real-Time Scenario
+
+You deploy a bad commit to production. Instead of rewriting history:
+
+```bash
+git revert c7f190
+git push origin main
+```
+
+→ CI/CD deploys a fix automatically.
+
+---
+
+# 🔥 3. git reset — Changes History (Dangerous)
+
+---
+
+## 🟥 git reset
+
+It moves your HEAD to another commit. It overwrites history → dangerous for shared branches.
+
+There are 3 types:
+
+---
+
+## 3.1️⃣ git reset --soft
+
+**Keeps:**
+- changes in staging
+
+**Moves HEAD only.**
+
+**Example:**  
+You want to "undo" last commit but keep all files staged.
+
+```bash
+git reset --soft HEAD~1
+```
+
+---
+
+## 3.2️⃣ git reset --mixed (default)
+
+**Keeps:**
+- changes in working directory
+
+**Unstages them.**
+
+```bash
+git reset HEAD~1
+```
+
+---
+
+## 3.3️⃣ git reset --hard
+
+⚠️ **Deletes working directory changes**  
+⚠️ **Irreversible without backup**
+
+**Example:**  
+You want to discard all local changes:
+
+```bash
+git reset --hard HEAD~1
+```
+
+or
+
+```bash
+git reset --hard origin/main
+```
+
+---
+
+## 🎯 Real-Time Scenario (git reset)
+
+You accidentally committed 100MB log files. You want to remove them without preserving changes:
+
+```bash
+git reset --hard HEAD~1
+```
+
+---
+
+# 🔥 Summary Table (Perfect for Interviews)
+
+| Command | Purpose | Rewrites History? | Safe for Shared Branch? | Real Use Case |
+|---------|---------|-------------------|------------------------|---------------|
+| **git merge** | Combine branches | ❌ No | ✅ Yes | Team merging workflows |
+| **git rebase** | Linear clean history | ✅ Yes | ❌ No | Clean PR before merge |
+| **git revert** | Undo a commit safely | ❌ No | ✅ Yes | Fix prod issue without breaking history |
+| **git reset** | Move HEAD & modify history | ✅ Yes | ❌ No | Undo local commits |
+
+---
+
+# 🧪 Real-Time Hands-On Example (All Commands)
+
+---
+
+## Step 1 — Create a feature branch
+
+```bash
+git checkout -b feature/login
+```
+
+---
+
+## Step 2 — Fix commits (reset)
+
+```bash
+git reset --soft HEAD~1
+# rewrite commit message or modify files
+```
+
+---
+
+## Step 3 — Clean history (rebase)
 
 ```bash
 git rebase main
+```
+
+---
+
+## Step 4 — Merge clean branch
+
+```bash
+git merge feature/login
+```
+
+---
+
+## Step 5 — Production bug found → revert
+
+```bash
+git revert <commit-hash>
+git push main
 ```
 
 ### **Industry Use**
