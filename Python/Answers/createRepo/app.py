@@ -15,6 +15,9 @@ data={
     "description":"This is my initial repo created using the github REST API",
     "private":"True"
 }
+def dummyMethod():
+    print("This is a dummy method")
+    
 
 response = requests.post(url=f"{BaseURL}/user/repos", json=data, headers=Headers)
 print(response.status_code)
