@@ -102,4 +102,3 @@ def test_update_non_existing_user():
     response = client.put("/user/999", json=updated_user)
     assert response.status_code == 200
     assert response.json() == {"error": "User not found"}
-
