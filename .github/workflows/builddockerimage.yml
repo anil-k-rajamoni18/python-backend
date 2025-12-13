@@ -10,8 +10,6 @@ jobs:
   lint-build-deploy:
     runs-on: ubuntu-latest
 
-    # All `run:` commands will start in this folder
-    # 👉 CHANGE THIS to your actual folder
     defaults:
       run:
         working-directory: Python/Day10/fastapi-docker-example
@@ -27,33 +25,36 @@ jobs:
         with:
           python-version: "3.11"
 
-      # 3) Install dependencies for linting
+      # 3) Install dependencies for linting & tests
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install flake8
+          pip install flake8 pytest
 
       # 4) Lint Python code
       - name: Run flake8 linting
         run: |
           flake8 .
 
-      # 5) Log in to Docker Hub
-      #    👉 You must create secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+      # 5) Run test cases
+      - name: Run pytest tests
+        run: |
+          pytest -q
+
+      # 6) Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 6) Build & push Docker image
+      # 7) Build & push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          # Context is the folder with Dockerfile
-          # This is relative to repo root, NOT to working-directory above
           context: ./Python/Day10/fastapi-docker-example
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-docker-app:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-docker-app:${{ github.sha }}
+
