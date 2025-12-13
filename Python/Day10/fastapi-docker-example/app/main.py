@@ -44,7 +44,8 @@ def get_user(user_id: int):
             row = cursor.fetchone()
             if row is None:
                 return {"error": "User not found"}
-            return row["data"]
+            return json.loads(row["data"])
+
 
 
 @app.post("/user/")
@@ -71,7 +72,8 @@ def list_users():
         with conn.cursor() as cursor:
             cursor.execute("SELECT data FROM users")
             rows = cursor.fetchall()
-            return [row["data"] for row in rows]
+            return [json.loads(row["data"]) for row in rows]
+
 
 
 @app.delete("/user/{user_id}")
