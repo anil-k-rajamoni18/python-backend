@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 
+
 app = FastAPI()
 
-users = [] 
+users = []
+
 
 @app.get("/")
 def home():
     return {"message": "Hello, FastAPI running inside Docker 🚀!"}
+
 
 @app.get("/user/{user_id}")
 def get_user(user_id: int):
@@ -21,6 +24,7 @@ def create_user(user: dict):
     users.append(user)
     return user
 
+
 @app.get("/users/")
 def list_users():
     return users
@@ -31,6 +35,7 @@ def delete_user(user_id: int):
     global users
     users = [user for user in users if user["id"] != user_id]
     return {"message": "User deleted"}
+
 
 @app.put("/user/{user_id}")
 def update_user(user_id: int, updated_user: dict):
