@@ -17,7 +17,7 @@ services:
         condition: service_healthy
 
   mysql-db:
-    image: mysql:8.2
+    image: mysql
     container_name: mysql-db
     ports:
       - "3306:3306"
