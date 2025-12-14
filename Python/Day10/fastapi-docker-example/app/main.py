@@ -1,103 +1,61 @@
-from fastapi import FastAPI
-import pymysql
-import json
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-app = FastAPI()
+from app.database import engine, Base, get_db
+from app import crud, schemas
 
-# 🔗 Connect to MySQL running inside Docker
-def get_connection():
-    return pymysql.connect(
-        host="mysql-db",        
-        user="app_user",
-        password="app_pass",
-        database="app_db",
-        cursorclass=pymysql.cursors.DictCursor
-    )
+app = FastAPI(title="FastAPI + MySQL (ORM)")
 
-# 🗄️ Create table if not exists
-def init_db():
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS users (
-                    id INT PRIMARY KEY,
-                    data JSON NOT NULL
-                )
-            """)
-        conn.commit()
-
-init_db()
-
+# Create tables on startup
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def home():
-    return {"message": "Hello, FastAPI running inside Docker 🚀!"}
+    return {"message": "FastAPI + SQLAlchemy + MySQL 🚀"}
 
+@app.post("/user/", response_model=schemas.UserResponse)
+def create_user(
+    user: schemas.UserCreate,
+    db: Session = Depends(get_db)
+):
+    existing = crud.get_user(db, user.id)
+    if existing:
+        raise HTTPException(status_code=400, detail="User already exists")
+    return crud.create_user(db, user)
 
-@app.get("/user/{user_id}")
-def get_user(user_id: int):
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT data FROM users WHERE id=%s", (user_id,))
-            row = cursor.fetchone()
-            if row is None:
-                return {"error": "User not found"}
-            return json.loads(row["data"])
-
-
-
-@app.post("/user/")
-def create_user(user: dict):
-    user_id = user.get("id")
-    if user_id is None:
-        return {"error": "User must have an 'id' field"}
-
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute(
-                "INSERT INTO users (id, data) VALUES (%s, %s)",
-                (user_id, json.dumps(user))
-            )
-        conn.commit()
+@app.get("/user/{user_id}", response_model=schemas.UserResponse)
+def get_user(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    user = crud.get_user(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     return user
 
+@app.get("/users/", response_model=list[schemas.UserResponse])
+def list_users(db: Session = Depends(get_db)):
+    return crud.get_users(db)
 
-@app.get("/users/")
-def list_users():
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT data FROM users")
-            rows = cursor.fetchall()
-            return [json.loads(row["data"]) for row in rows]
-
-
+@app.put("/user/{user_id}", response_model=schemas.UserResponse)
+def update_user(
+    user_id: int,
+    updated_data: dict,
+    db: Session = Depends(get_db)
+):
+    user = crud.update_user(db, user_id, updated_data)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 @app.delete("/user/{user_id}")
-def delete_user(user_id: int):
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
-        conn.commit()
-        if cursor.rowcount == 0:
-            return {"error": "User not found"}
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    user = crud.delete_user(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     return {"message": "User deleted"}
-
-
-@app.put("/user/{user_id}")
-def update_user(user_id: int, updated_user: dict):
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute(
-                "UPDATE users SET data=%s WHERE id=%s",
-                (json.dumps(updated_user), user_id)
-            )
-        conn.commit()
-        if cursor.rowcount == 0:
-            return {"error": "User not found"}
-    return updated_user
