@@ -1,26 +1,10 @@
 version: '3.9'
 
 services:
-  api:
-    build: .
-    ports:
-      - "8000:8000"
-    networks:
-      - app-network
-    environment:
-      DB_HOST: mysql-db
-      DB_USER: app_user
-      DB_PASSWORD: app_pass
-      DB_NAME: app_db
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-
   mysql-db:
     image: mysql
     container_name: mysql-db
-    ports:
-      - "3306:3306"
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: supersecret
       MYSQL_DATABASE: app_db
@@ -31,10 +15,27 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psupersecret"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -psupersecret || exit 1"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
+      start_period: 30s
+
+  api:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: mysql-db
+      DB_USER: app_user
+      DB_PASSWORD: app_pass
+      DB_NAME: app_db
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    networks:
+      - app-network
 
 networks:
   app-network:
