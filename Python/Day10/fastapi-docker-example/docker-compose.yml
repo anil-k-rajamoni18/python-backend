@@ -8,20 +8,33 @@ services:
     networks:
       - app-network
     environment:
-      - DB_HOST=mysql-db
+      DB_HOST: mysql-db
+      DB_USER: app_user
+      DB_PASSWORD: app_pass
+      DB_NAME: app_db
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
 
   mysql-db:
     image: mysql:8.2
+    container_name: mysql-db
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_pass
     volumes:
       - mysqldata:/var/lib/mysql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psupersecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 networks:
   app-network:
