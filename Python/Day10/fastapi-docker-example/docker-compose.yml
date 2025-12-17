@@ -5,6 +5,7 @@ services:
     image: mysql
     container_name: mysql-db
     restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
     ports:
       - "3306:3306"
     environment:
