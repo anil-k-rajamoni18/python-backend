@@ -133,4 +133,3 @@ def update_user(user_id: int, updated_user: dict):
         raise HTTPException(status_code=404, detail="User not found")
 
     return updated_user
-
