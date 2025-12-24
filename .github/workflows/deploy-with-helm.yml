@@ -118,6 +118,13 @@ jobs:
         uses: azure/setup-helm@v4
         with:
           version: 'v3.13.0'
+
+      - name: Debug KUBECONFIG length
+        run: |
+          echo "KUBECONFIG length: ${#KUBECONFIG}"
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
       
       # 3) Configure kubectl
       - name: Configure kubectl
