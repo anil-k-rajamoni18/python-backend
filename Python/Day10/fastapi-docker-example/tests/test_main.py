@@ -69,6 +69,7 @@ class TestGetUser:
         assert response.status_code == 404
         assert response.json() == {"detail": "User not found"}
 
+
 class TestCreateUser:
     @patch("app.main.get_connection")
     def test_create_user_success(self, mock_get_conn, mock_db_connection):
@@ -171,6 +172,7 @@ class TestDeleteUser:
         assert response.status_code == 404
         assert response.json() == {"detail": "User not found"}
 
+
 class TestUpdateUser:
     @patch("app.main.get_connection")
     def test_update_user_success(self, mock_get_conn, mock_db_connection):
@@ -201,6 +203,7 @@ class TestUpdateUser:
 
         assert response.status_code == 404
         assert response.json() == {"detail": "User not found"}
+
 
 class TestDatabaseInitialization:
     @patch("app.main.get_connection")
