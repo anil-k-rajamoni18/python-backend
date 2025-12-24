@@ -3,3 +3,5 @@ uvicorn
 pymysql
 cryptography
 httpx
+pytest
+pytest-cov
