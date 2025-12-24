@@ -122,9 +122,10 @@ jobs:
       # 3) Configure kubectl
       - name: Configure kubectl
         run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
+          set -e
+          mkdir -p "$HOME/.kube"
+          printf "%s" "${{ secrets.KUBECONFIG }}" | base64 --decode > "$HOME/.kube/config"
+          chmod 600 "$HOME/.kube/config"
       
       # 4) Verify cluster connection
       - name: Verify K3s cluster connection
