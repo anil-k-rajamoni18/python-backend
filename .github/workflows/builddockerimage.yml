@@ -1,5 +1,4 @@
 name: Lint, Build & Deploy Docker Image
-
 on:
   push:
     branches: [ "feature/githubactions" ]
@@ -9,41 +8,73 @@ on:
 jobs:
   lint-build-deploy:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: Python/Day10/fastapi-docker-example
-
+    
     steps:
       # 1) Checkout repo (clone equivalent)
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       # 2) Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
+      
       # 3) Install dependencies for linting & tests
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install flake8 pytest
-
+          pip install flake8 pytest pytest-cov
+      
       # 4) Lint Python code
       - name: Run flake8 linting
         run: |
           flake8 .
-
-      # 6) Log in to Docker Hub
+      
+      # 5) Run tests with coverage
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ -v --cov=app --cov-report=html --cov-report=xml --cov-report=term
+        continue-on-error: false
+      
+      # 6) Upload coverage report to artifacts
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: Python/Day10/fastapi-docker-example/htmlcov/
+          retention-days: 30
+      
+      # 7) Upload coverage XML for badges (optional)
+      - name: Upload coverage XML
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-xml
+          path: Python/Day10/fastapi-docker-example/coverage.xml
+          retention-days: 30
+      
+      # 8) Display coverage summary in logs
+      - name: Coverage Summary
+        if: always()
+        run: |
+          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          coverage report >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+      
+      # 9) Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # 7) Build & push Docker image
+      
+      # 10) Build & push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -52,4 +83,3 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-docker-app:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-docker-app:${{ github.sha }}
-
