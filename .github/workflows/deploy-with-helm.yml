@@ -1,0 +1,208 @@
+name: Lint, Test, Build & Deploy with Helm
+
+on:
+  push:
+    branches: [ "feature/githubactions", "main" ]
+  pull_request:
+    branches: [ "feature/githubactions", "main" ]
+
+env:
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-docker-app
+  HELM_CHART_PATH: ./Python/Day10/fastapi-docker-example/helm-chart
+  NAMESPACE: dev-ns
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Python/Day10/fastapi-docker-example
+    
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      short-sha: ${{ steps.vars.outputs.short_sha }}
+    
+    steps:
+      # 1) Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # 2) Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      # 3) Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install flake8 pytest pytest-cov
+      
+      # 4) Lint Python code
+      - name: Run flake8 linting
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      
+      # 5) Run tests with coverage
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ -v --cov=app --cov-report=html --cov-report=xml --cov-report=term
+        continue-on-error: false
+      
+      # 6) Upload coverage report
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: Python/Day10/fastapi-docker-example/htmlcov/
+          retention-days: 30
+      
+      # 7) Coverage summary
+      - name: Coverage Summary
+        if: always()
+        run: |
+          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          coverage report >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+      
+      # 8) Set variables
+      - name: Set output variables
+        id: vars
+        run: |
+          echo "short_sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+      
+      # 9) Docker metadata
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=sha,prefix=,format=long
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      # 10) Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      # 11) Build and push Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Python/Day10/fastapi-docker-example
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy-to-k3s:
+    needs: lint-test-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/githubactions'
+    
+    steps:
+      # 1) Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # 2) Install Helm
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.13.0'
+      
+      # 3) Configure kubectl
+      - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+      
+      # 4) Verify cluster connection
+      - name: Verify K3s cluster connection
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+      
+      # 5) Create namespace if not exists
+      - name: Create namespace
+        run: |
+          kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+      
+      # 6) Lint Helm chart
+      - name: Lint Helm chart
+        run: |
+          helm lint ${{ env.HELM_CHART_PATH }}
+      
+      # 7) Deploy/Upgrade with Helm
+      - name: Deploy application with Helm
+        run: |
+          helm upgrade --install fastapi-app ${{ env.HELM_CHART_PATH }} \
+            --namespace ${{ env.NAMESPACE }} \
+            --set app.image.repository=${{ env.DOCKER_IMAGE }} \
+            --set app.image.tag=${{ github.sha }} \
+            --wait \
+            --timeout 5m \
+            --atomic
+      
+      # 8) Verify deployment
+      - name: Verify deployment
+        run: |
+          kubectl get all -n ${{ env.NAMESPACE }}
+          kubectl rollout status deployment/webapp-deployment -n ${{ env.NAMESPACE }} --timeout=300s
+      
+      # 9) Get service endpoint
+      - name: Get service endpoint
+        run: |
+          echo "## Deployment Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Namespace:** ${{ env.NAMESPACE }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Release:** fastapi-app" >> $GITHUB_STEP_SUMMARY
+          echo "**Image Tag:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Services" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          kubectl get svc -n ${{ env.NAMESPACE }} >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Pods" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          kubectl get pods -n ${{ env.NAMESPACE }} >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  rollback:
+    needs: deploy-to-k3s
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+      # 1) Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # 2) Install Helm
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.13.0'
+      
+      # 3) Configure kubectl
+      - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+      
+      # 4) Rollback deployment
+      - name: Rollback Helm release
+        run: |
+          helm rollback fastapi-app -n ${{ env.NAMESPACE }}
+          echo "⚠️ Deployment failed. Rolled back to previous version." >> $GITHUB_STEP_SUMMARY
