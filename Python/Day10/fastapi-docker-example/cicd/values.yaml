@@ -1,0 +1,74 @@
+# Application Configuration
+app:
+  name: webapp
+  replicaCount: 1
+  
+  image:
+    repository: thumunavyasri/fastapi-docker-app
+    tag: latest
+    pullPolicy: Always
+  
+  service:
+    type: NodePort
+    port: 8000
+    targetPort: 8000
+    nodePort: 30007
+  
+  resources:
+    requests:
+      cpu: 250m
+      memory: 400Mi
+    limits:
+      cpu: 500m
+      memory: 800Mi
+  
+  securityContext:
+    runAsUser: 1000
+    runAsNonRoot: true
+    fsGroup: 2000
+    allowPrivilegeEscalation: false
+  
+  probes:
+    readiness:
+      path: /
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      failureThreshold: 3
+    liveness:
+      path: /
+      initialDelaySeconds: 15
+      periodSeconds: 20
+      failureThreshold: 3
+
+# HPA Configuration
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 70
+
+# MySQL Configuration
+mysql:
+  enabled: true
+  name: mysql
+  
+  image:
+    repository: mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+  
+  service:
+    port: 3306
+  
+  persistence:
+    enabled: true
+    size: 128Mi
+    accessMode: ReadWriteOnce
+  
+  # MySQL credentials (base64 encoded)
+  secrets:
+    rootPassword: c3VwZXJzZWNyZXQ=      # supersecret
+    database: YXBwX2Ri                  # app_db
+    user: YXBwX3VzZXI=                  # app_user
+    password: YXBwX3Bhc3M=              # app_pass

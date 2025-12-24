@@ -1,18 +1,25 @@
 import json
+import os
 
 import pymysql
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
+# ---- Database configuration from environment variables ----
+DB_HOST = os.getenv("DB_HOST", "mysql-db")
+DB_USER = os.getenv("DB_USER", "app_user")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "app_pass")
+DB_NAME = os.getenv("DB_NAME", "app_db")
+
 
 def get_connection():
     """Create and return a MySQL database connection."""
     return pymysql.connect(
-        host="mysql-db",
-        user="app_user",
-        password="app_pass",
-        database="app_db",
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
         cursorclass=pymysql.cursors.DictCursor,
     )
 
