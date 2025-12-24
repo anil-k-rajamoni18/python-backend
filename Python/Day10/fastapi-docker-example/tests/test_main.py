@@ -1,7 +1,9 @@
+import json
+from unittest.mock import MagicMock, patch
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import MagicMock, patch, call
-import json
+
 from app.main import app
 
 client = TestClient(app)
@@ -12,205 +14,233 @@ def mock_db_connection():
     """Fixture to mock database connection and cursor"""
     mock_conn = MagicMock()
     mock_cursor = MagicMock()
-    
+
     # Setup context manager behavior for connection
     mock_conn.__enter__ = MagicMock(return_value=mock_conn)
     mock_conn.__exit__ = MagicMock(return_value=False)
-    
+
     # Setup context manager behavior for cursor
     mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
     mock_cursor.__exit__ = MagicMock(return_value=False)
-    
+
     mock_conn.cursor.return_value = mock_cursor
-    
+
     return mock_conn, mock_cursor
 
 
 class TestHomeEndpoint:
     """Tests for the home endpoint"""
-    
+
     def test_home_returns_welcome_message(self):
         response = client.get("/")
         assert response.status_code == 200
-        assert response.json() == {"message": "Hello, FastAPI running inside Docker 🚀!"}
+        assert response.json() == {
+            "message": "Hello, FastAPI running inside Docker 🚀!"
+        }
 
 
 class TestGetUser:
     """Tests for GET /user/{user_id} endpoint"""
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_get_user_success(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
-        user_data = {"id": 1, "name": "John Doe", "email": "john@example.com"}
-        mock_cursor.fetchone.return_value = {"data": json.dumps(user_data)}
-        
+
+        user_data = {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+        }
+        mock_cursor.fetchone.return_value = {
+            "data": json.dumps(user_data)
+        }
+
         response = client.get("/user/1")
-        
+
         assert response.status_code == 200
         assert response.json() == user_data
         mock_cursor.execute.assert_called_once_with(
-            "SELECT data FROM users WHERE id=%s", (1,)
+            "SELECT data FROM users WHERE id=%s",
+            (1,),
         )
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_get_user_not_found(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         mock_cursor.fetchone.return_value = None
-        
+
         response = client.get("/user/999")
-        
+
         assert response.status_code == 200
         assert response.json() == {"error": "User not found"}
 
 
 class TestCreateUser:
     """Tests for POST /user/ endpoint"""
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_create_user_success(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
-        new_user = {"id": 1, "name": "Jane Doe", "email": "jane@example.com"}
-        
+
+        new_user = {
+            "id": 1,
+            "name": "Jane Doe",
+            "email": "jane@example.com",
+        }
+
         response = client.post("/user/", json=new_user)
-        
+
         assert response.status_code == 200
         assert response.json() == new_user
         mock_cursor.execute.assert_called_once_with(
             "INSERT INTO users (id, data) VALUES (%s, %s)",
-            (1, json.dumps(new_user))
+            (1, json.dumps(new_user)),
         )
         mock_conn.commit.assert_called_once()
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_create_user_without_id(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
-        invalid_user = {"name": "Jane Doe", "email": "jane@example.com"}
-        
+
+        invalid_user = {
+            "name": "Jane Doe",
+            "email": "jane@example.com",
+        }
+
         response = client.post("/user/", json=invalid_user)
-        
+
         assert response.status_code == 200
-        assert response.json() == {"error": "User must have an 'id' field"}
+        assert response.json() == {
+            "error": "User must have an 'id' field"
+        }
         mock_cursor.execute.assert_not_called()
 
 
 class TestListUsers:
     """Tests for GET /users/ endpoint"""
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_list_users_success(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         users = [
             {"id": 1, "name": "User 1"},
             {"id": 2, "name": "User 2"},
-            {"id": 3, "name": "User 3"}
+            {"id": 3, "name": "User 3"},
         ]
         mock_cursor.fetchall.return_value = [
             {"data": json.dumps(user)} for user in users
         ]
-        
+
         response = client.get("/users/")
-        
+
         assert response.status_code == 200
         assert response.json() == users
-        mock_cursor.execute.assert_called_once_with("SELECT data FROM users")
-    
-    @patch('app.main.get_connection')
+        mock_cursor.execute.assert_called_once_with(
+            "SELECT data FROM users"
+        )
+
+    @patch("app.main.get_connection")
     def test_list_users_empty(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         mock_cursor.fetchall.return_value = []
-        
+
         response = client.get("/users/")
-        
+
         assert response.status_code == 200
         assert response.json() == []
 
 
 class TestDeleteUser:
     """Tests for DELETE /user/{user_id} endpoint"""
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_delete_user_success(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         mock_cursor.rowcount = 1
-        
+
         response = client.delete("/user/1")
-        
+
         assert response.status_code == 200
         assert response.json() == {"message": "User deleted"}
         mock_cursor.execute.assert_called_once_with(
-            "DELETE FROM users WHERE id=%s", (1,)
+            "DELETE FROM users WHERE id=%s",
+            (1,),
         )
         mock_conn.commit.assert_called_once()
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_delete_user_not_found(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         mock_cursor.rowcount = 0
-        
+
         response = client.delete("/user/999")
-        
+
         assert response.status_code == 200
         assert response.json() == {"error": "User not found"}
 
 
 class TestUpdateUser:
     """Tests for PUT /user/{user_id} endpoint"""
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_update_user_success(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         mock_cursor.rowcount = 1
-        updated_data = {"id": 1, "name": "Updated Name", "email": "updated@example.com"}
-        
+        updated_data = {
+            "id": 1,
+            "name": "Updated Name",
+            "email": "updated@example.com",
+        }
+
         response = client.put("/user/1", json=updated_data)
-        
+
         assert response.status_code == 200
         assert response.json() == updated_data
         mock_cursor.execute.assert_called_once_with(
             "UPDATE users SET data=%s WHERE id=%s",
-            (json.dumps(updated_data), 1)
+            (json.dumps(updated_data), 1),
         )
         mock_conn.commit.assert_called_once()
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_update_user_not_found(self, mock_get_conn, mock_db_connection):
         mock_conn, mock_cursor = mock_db_connection
         mock_get_conn.return_value = mock_conn
-        
+
         mock_cursor.rowcount = 0
-        updated_data = {"id": 999, "name": "Ghost User"}
-        
+        updated_data = {
+            "id": 999,
+            "name": "Ghost User",
+        }
+
         response = client.put("/user/999", json=updated_data)
-        
+
         assert response.status_code == 200
         assert response.json() == {"error": "User not found"}
 
 
 class TestDatabaseInitialization:
     """Tests for database initialization"""
-    
-    @patch('app.main.get_connection')
+
+    @patch("app.main.get_connection")
     def test_init_db_creates_table(self, mock_get_conn):
         from app.main import init_db
-        
+
         mock_conn = MagicMock()
         mock_cursor = MagicMock()
         mock_conn.__enter__ = MagicMock(return_value=mock_conn)
@@ -219,9 +249,9 @@ class TestDatabaseInitialization:
         mock_cursor.__exit__ = MagicMock(return_value=False)
         mock_conn.cursor.return_value = mock_cursor
         mock_get_conn.return_value = mock_conn
-        
+
         init_db()
-        
+
         mock_cursor.execute.assert_called_once()
         call_args = mock_cursor.execute.call_args[0][0]
         assert "CREATE TABLE IF NOT EXISTS users" in call_args
