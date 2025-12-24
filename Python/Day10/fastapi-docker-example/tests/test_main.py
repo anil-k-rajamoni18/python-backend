@@ -67,7 +67,8 @@ class TestGetUser:
         response = client.get("/user/999")
 
         assert response.status_code == 404
-        assert response.json() == {"error": "User not found"}
+        assert response.json() == {"detail": "User not found"}
+
 
 
 class TestCreateUser:
@@ -104,8 +105,9 @@ class TestCreateUser:
 
         assert response.status_code == 400
         assert response.json() == {
-            "error": "User must have an 'id' field"
+            "detail": "User must have an 'id' field"
         }
+
         mock_cursor.execute.assert_not_called()
 
 
@@ -169,7 +171,8 @@ class TestDeleteUser:
         response = client.delete("/user/999")
 
         assert response.status_code == 404
-        assert response.json() == {"error": "User not found"}
+        assert response.json() == {"detail": "User not found"}
+
 
 
 class TestUpdateUser:
@@ -201,7 +204,8 @@ class TestUpdateUser:
         response = client.put("/user/999", json={"id": 999})
 
         assert response.status_code == 404
-        assert response.json() == {"error": "User not found"}
+        assert response.json() == {"detail": "User not found"}
+
 
 
 class TestDatabaseInitialization:
