@@ -132,6 +132,14 @@ jobs:
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
+
+      - name: Validate kubeconfig
+        run: |
+          head -10 $HOME/.kube/config
+
+      - name: Validate kubeconfig
+        run: |
+          kubectl config view
       
       # 4) Verify cluster connection
       - name: Verify K3s cluster connection
@@ -207,6 +215,7 @@ jobs:
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
+
       
       # 4) Rollback deployment
       - name: Rollback Helm release
