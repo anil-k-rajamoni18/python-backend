@@ -14,9 +14,10 @@
 - ✅ Frameworks + Databases (Flask, FastAPI, PostgreSQL, MongoDB) → 11 days (~26%)
 - ✅ React UI & Backend Integration → 2 days (~5%)
 - ✅ CI/CD, Docker, AWS → 4 days (~9%)
-- ✅ Data Analytics, BI & ML Fundamentals → 9 days (~21%)
-- ✅ Capstone Projects → 2 days (~5%)
+- ✅ Data Analytics, BI & ML Fundamentals → 9 days (~21%) [Advance]
+- ✅ Capstone Projects → 2 days (~5%) [Advance]
 
+---
 ## ✅ PART 1: Python Basics & Foundations (4 Days)
 
 **Goal:** Make students comfortable thinking in Python
