@@ -751,7 +751,6 @@
 - Error handling and logging
 
 ---
-# 🚀 FRAMEWORKS, DATABASES & DEPLOYMENT - INDUSTRY-READY SYLLABUS
 
 ## ✅ Frameworks (Flask, FastAPI) + Databases (PostgreSQL, MongoDB) → 11 Days
 
@@ -1746,17 +1745,14 @@
 
 ---
 
-# 📊 DATA ANALYTICS, BI & AI TRACK - INDUSTRY-READY SYLLABUS
 
 ## ✅ Python for Data Analytics, BI & Machine Learning → 9 Days
 
-**Goal:** Transform from developer to data-driven decision maker
 
 ---
 
 ### 📅 Day 33 – NumPy, Pandas & Core Python Data Libraries
 
-🔑 **This is the most important foundation day for Data / BI roles**
 
 #### 🔹 Topics
 
@@ -2470,9 +2466,8 @@
 
 ---
 
-## ✅ CAPSTONE PROJECTS (INDUSTRY STANDARD) → 2 Days
+## CAPSTONE PROJECTS (INDUSTRY STANDARD) → 2 Days
 
-**These are portfolio-grade, resume-ready projects**
 
 ---
 
