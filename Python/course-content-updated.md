@@ -1,7 +1,7 @@
 # Python Full-Stack Backend Course Content 
 
 **Role focus:** Python Backend Engineer with React (UI) integration awareness  
-**Audience:** Students with basic programming exposure (loops, variables)  
+**Audience:** People with basic programming exposure (loops, variables)  
 **Outcome:** Job-ready Python backend developer with strong **Advanced Python**, **OOP**, **Async**, **Frameworks**, **DB**, **Cloud**, and **AI/LLM fundamentals**
 
 **Overall Time Commitment**
