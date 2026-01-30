@@ -158,3 +158,30 @@ while count < 5:
     count += 1  
 else:
     print("This will not print because the loop was broken.")
+
+
+## List Comprehensions with Loops
+# Example 1: Basic List Comprehension
+squares = [x**2 for x in range(10)]
+print(squares)
+
+# Example 2: List Comprehension with Condition
+evens = [x for x in range(10) if x % 2 == 0]
+print(evens)
+
+# Example 3: Nested List Comprehension
+matrix = [[j for j in range(5)] for i in range(3)]
+print(matrix)
+
+## Dictionary Comprehensions with Loops
+# Example 1: Basic Dictionary Comprehension
+squared_dict = {x: x**2 for x in range(5)}
+print(squared_dict)
+
+# Example 2: Dictionary Comprehension with Condition
+even_squared_dict = {x: x**2 for x in range(10) if x % 2 == 0}
+print(even_squared_dict)
+
+# Example 3: Nested Dictionary Comprehension
+matrix_dict = {i: {j: i*j for j in range(3)} for i in range(3)}
+print(matrix_dict)

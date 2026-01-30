@@ -11,10 +11,10 @@
 # is_admin = bool(int(input("Are you admin? (1 for Yes, 0 for No): "))) # bool(data) => converts data to boolean
 # print(is_admin, type(is_admin))
 
-# marks = [0] * 3  # list with 3 elements initialized to 0 
-# for i in range(3):
-#     mark = float(input(f"Enter mark {i+1}: "))
-#     marks[i] = mark
+marks = []  # list with 3 elements initialized to 0 
+for i in range(3):
+    mark = float(input(f"Enter mark {i+1}: "))
+    marks.append(mark)
 
 # print(marks, type(marks))
 
