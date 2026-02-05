@@ -75,20 +75,3 @@ def get_user_info():
 # The space complexity of a tuple is O(n), where n is the number of elements in the tuple.
 
 
-'''
-Create class with methods:
-
-login()
-logout()
-reset_password()
-'''
-
-class User:
-    def login(self):
-        pass
-
-    def logout(self):
-        pass
-
-    def reset_password(self):
-        pass
