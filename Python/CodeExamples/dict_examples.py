@@ -114,7 +114,7 @@ print(company.get("departments").get("HR").get("budget", 0))  # Outputs: 200000
 print(company["departments"]["HR"]["budget"])  # Outputs: 200000
 
 # Unknown key
-print(company["departments"]["HR"]["revenue"])  # Outputs: KeyError
+# print(company["departments"]["HR"]["revenue"])  # Outputs: KeyError
 
 # When to use Dictionaries
 # 1. When you need to associate values with unique keys.
@@ -142,3 +142,29 @@ print(company["departments"]["HR"]["revenue"])  # Outputs: KeyError
 # Space Complexity
 # 1. The space complexity of a dictionary is O(n), where n is the number of key-value pairs stored in the dictionary. This is because each key-value pair requires additional memory to store both the key and the value.
 # 2. Additionally, dictionaries may use extra space for internal data structures, such as hash tables and linked lists, to handle collisions and maintain performance.
+
+
+
+## Defaultdict Example
+
+from collections import defaultdict
+
+# Create a defaultdict with a default value of 0
+word_count = defaultdict(int)
+normal_dict_word_count = {}
+# Count the frequency of words in a list
+words = ["apple", "banana", "apple", "orange", "banana", "apple"]
+
+# using normal dict
+for word in words:
+    if word in normal_dict_word_count:
+        normal_dict_word_count[word] += 1
+    else:
+        normal_dict_word_count[word] = 1
+
+for word in words:
+    word_count[word] += 1
+
+print("Word Count:", dict(word_count))
+print("Unknown key access in defaultdict:", word_count["grape"])  # Outputs: 0 (default value)
+print("Normal Dict Word Count:", normal_dict_word_count)

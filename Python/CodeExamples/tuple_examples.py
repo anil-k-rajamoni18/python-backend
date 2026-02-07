@@ -75,3 +75,28 @@ def get_user_info():
 # The space complexity of a tuple is O(n), where n is the number of elements in the tuple.
 
 
+
+# Named Tuple 
+# Named tuples are a subclass of tuples that allow you to access elements by name instead of index. 
+# They are defined using the namedtuple factory function from the collections module.
+
+from collections import namedtuple
+
+# Define a named tuple for a Point in 2D space
+Point = namedtuple('Point', ['x', 'y']) # namedtuple(typename, field_names)
+
+# Create an instance of the Point named tuple
+p = Point(10, 20)
+
+# Accessing elements by name
+print("X coordinate:", p.x)
+print("Y coordinate:", p.y)
+
+
+Student = namedtuple('Student', ['name', 'age', 'grade'])
+student1 = Student("Alice", 20, "A")
+
+# Accessing elements by name
+print("Student Name:", student1.name)
+print("Student Age:", student1.age)
+print("Student Grade:", student1.grade)

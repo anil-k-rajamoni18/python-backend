@@ -1,0 +1,273 @@
+## What is a function in Python?
+# A function is a reusable block of code that performs a specific task. 
+# It allows you to organize your code into logical sections, making it easier to read and maintain. Functions can take input parameters, perform operations, and return output.
+
+# Example of a simple function
+def greet(name):
+    return f"Hello, {name}!"
+
+# Calling the function
+print(greet("Surya"))  # Output: Hello, Surya!
+
+# print(greet())  # Error: missing 1 required positional argument: 'name'
+
+## Types of Functions in Python
+# 1. Built-in Functions: These are functions that are provided by Python and are always available for use. 
+# Examples include print(), len(), type(), etc.
+
+# 2. User-Defined Functions: These are functions that you create yourself to perform specific tasks.
+def add(a, b):
+    return a + b
+
+# Calling the user-defined function
+print(add(5, 3))  # Output: 8
+
+
+## Function Parameters and Arguments
+# Parameters are the variables that are defined in the function definition, while arguments are the actual values that are passed to the function when it is called.
+
+# 1. Postional Arguments
+def subtract(a, b):
+    return a - b
+
+print(subtract(10, 4))  # Output: 6
+# print(subtract(4))  # Error: missing 1 required positional argument: 'b'
+
+
+# 2. Keyword Arguments
+def divide(a, b):
+    return a / b
+
+print(divide(a=20, b=5))  # Output: 4.0
+print(divide(b=5, a=20))  # Output: 4.0
+
+# 3. Default Arguments
+def power(base, exponent=2):
+    return base ** exponent
+
+print(power(5))  # Output: 25 (default exponent is 2)
+print(power(5, 3))  # Output: 125 (exponent is overridden
+
+# 4. Variable-Length Arguments
+def sum_all(*args):
+    print("Arguments received:", args)
+    print("Type of args:", type(args))
+    return sum(args)
+
+print(sum_all(1, 2, 3, 4))  # Output: 10
+
+
+# 5. Kwargs (Keyword Variable-Length Arguments)
+def print_info(**kwargs):
+    print("Keyword Arguments received:", kwargs)
+    print("Type of kwargs:", type(kwargs))
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=30, city="New York")
+
+
+# 6. Keyword-Only Arguments
+def print_info(name, age, *, city): # The * indicates that city is a keyword-only argument
+    print("Name:", name)
+    print("Age:", age)
+    print("City:", city)
+
+print_info("Alice", 30, city="New York")
+
+# 7. Positional-Only Arguments with Default Values
+def print_info(name, age, city="Unknown"):
+    print("Name:", name)
+    print("Age:", age)
+    print("City:", city)
+
+print_info("Alice", 30)  # City will use default value "Unknown"
+print_info("Alice", 30, "New York")  # City will be overridden to "New York"
+
+# Error scenario: Positional-Only Arguments with Default Values
+# def print_info(city="Unknown", name, age):
+#     print("Name:", name)
+#     print("Age:", age)
+#     print("City:", city)
+
+
+## Returning Values from Functions
+def calculate_area(radius):
+    import math
+    area = math.pi * radius ** 2
+    return area
+
+print(calculate_area(5))  # Output: 78.53981633974483
+
+# Multiple Return Values
+def get_user_info():
+    name = "Alice"
+    age = 30
+    city = "New York"
+    return name, age, city
+
+user_data = get_user_info()
+print("User Data:", user_data)  # Output: ('Alice', 30, 'New York')
+
+# No Return Value (returns None by default)
+def print_greeting(name):
+    print(f"Hello, {name}!")
+
+result = print_greeting("Bob")  # Output: Hello, Bob!
+print("Result of print_greeting:", result)  # Output: Result of print_greeting
+
+
+## Nested Functions
+
+def say_hello(name):
+    print(f"Hello, {name}!")
+
+greet = say_hello  # Assigning the function to a variable
+print(say_hello)
+print(greet)
+say_hello("Alice")  # Output: Hello, Alice!
+greet("Bob")  # Output: Hello, Bob!
+
+
+def calculator(operation):
+    def add(a, b):
+        return a + b
+    
+    def subtract(a, b):
+        return a - b
+    
+    if operation == "add":
+        return add
+    elif operation == "subtract":
+        return subtract
+    else:
+        raise ValueError("Invalid operation")
+    
+
+add_function = calculator("add")
+subtract_function = calculator("subtract")
+
+print(add_function(5, 3))  # Output: 8
+print(subtract_function(5, 3))  # Output: 2
+
+
+# Closures
+def outer_function(x):
+    def inner_function(y):
+        return x + y
+    return inner_function
+
+closure_example = outer_function(10)
+print(closure_example(5))  # Output: 15
+
+# Realtime Example of Closures
+def make_multiplier(multiplier):
+    def multiplier_function(x):
+        return x * multiplier
+    return multiplier_function
+
+
+double = make_multiplier(2)
+triple = make_multiplier(3)
+
+print(double(5))  # Output: 10
+print(triple(5))  # Output: 15
+
+
+# Lambda Functions
+# Lambda functions are anonymous functions that are defined using the lambda keyword.
+#  They are often used for short, simple functions that are not reused elsewhere in the code.
+
+# Syntax: lambda arguments: expression
+
+# regular function
+def square(x):
+    return x ** 2
+
+# lambda function
+square_lambda = lambda x: x ** 2
+print(square(5))  # Output: 25
+print(square_lambda(5))  # Output: 25
+
+# Lambda functions with multiple arguments
+add = lambda a, b: a + b
+print(add(3, 4))  # Output: 7
+
+# Lambda functions with no arguments
+greet = lambda: "Hello, World!"
+print(greet())  # Output: Hello, World!
+
+# Lambda with conditional expression
+max_value = lambda a, b: a if a > b else b
+print(max_value(10, 20))  # Output: 20
+
+is_even = lambda x: x % 2 == 0
+print(is_even(4))  # Output: True
+print(is_even(5))  # Output: False
+
+
+# map(function, iterable)
+# The map function applies a given function to each item of an iterable (like a list) and returns a map object (which is an iterator). 
+# You can convert the map object to a list or other iterable type if needed.
+
+
+# example-1
+
+numbers = [1, 2, 3, 4, 5]
+squared = map(lambda x: x ** 2, numbers)
+print(squared)  # Output: <map object at 0x...>
+print(list(squared))  # Output: [1, 4, 9, 16, 25]
+
+# example-2
+names = ["Alice", "Bob", "Charlie"]
+greeted_names = map(lambda name: f"Hello, {name}!", names)
+print(list(greeted_names))  # Output: ['Hello, Alice!', 'Hello, Bob!', 'Hello, Charlie!']
+
+# example-3
+ages = [25, 30, 35]
+age_groups = map(lambda age: "Adult" if age >= 18 else "Minor", ages)
+print(list(age_groups))  # Output: ['Adult', 'Adult', 'Adult']
+
+# example-4
+names = ["surRya ", "kriSHna ", "sita "]
+normalized_names = map(lambda name: name.strip().lower(), names)
+print(list(normalized_names))  # Output: ['surya', 'krishna', 'sita']
+
+
+# filter(function, iterable)
+# The filter function constructs an iterator from elements of an iterable for which a function returns true.
+
+numbers = [1, 2, 3, 4, 5]
+even_numbers = filter(lambda x: x % 2 == 0, numbers)
+print(list(even_numbers))  # Output: [2, 4]
+
+
+names = "surya krishna sita".split()
+long_names = filter(lambda name: len(name) > 4, names)
+print(list(long_names))  # Output: ['surya', 'krishna']
+
+name = "vikram aditya"
+vowel_names = filter(lambda name: name[0].lower() in 'aeiou', name.split())
+print(list(vowel_names))  # Output: ['aditya']
+
+
+# Reduce(function, iterable)
+# The reduce function applies a rolling computation to sequential pairs of values in an iterable.
+# How it works: It takes the first two elements of the iterable and applies the function to them, then takes the result and applies the function to it and the next element, and so on until all elements have been processed. The final result is a single value.
+
+from functools import reduce
+
+numbers = [1, 2, 3, 4, 5]
+product = reduce(lambda x, y: x * y, numbers)
+print(product)  # Output: 120
+
+
+# example-2
+from operator import add
+sum = reduce(add, numbers)
+print(sum)  # Output: 15
+
+# example-3 with strings
+words = ["Hello", "World", "from", "Python"]
+sentence = reduce(lambda x, y: x + " " + y, words)
+print(sentence)  # Output: Hello World from Python
