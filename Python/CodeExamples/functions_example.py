@@ -271,3 +271,128 @@ print(sum)  # Output: 15
 words = ["Hello", "World", "from", "Python"]
 sentence = reduce(lambda x, y: x + " " + y, words)
 print(sentence)  # Output: Hello World from Python
+
+
+## Local Variables
+# A local variable is declared inside a function and can only be used within that function.
+def add():
+    a = 10
+    b = 20
+    print(a + b)
+
+add()
+
+# Global Variables
+# A global variable is declared outside all functions and can be accessed anywhere.
+x = 100
+
+def show():
+    print(x)
+
+show()
+
+# Modifying Global Variable Inside Function
+# -> By default, Python treats variables inside a function as local.
+# -> To modify global variable → use global keyword.
+
+count = 0
+
+def increment():
+    count = count + 1
+    print(count)
+
+increment()
+print(count)
+
+
+balance = 1000
+
+def deposit(amount):
+    global balance
+    balance += amount
+
+deposit(500)
+print(balance)
+
+
+# # LEGB Rule (Scope Resolution)
+# L – Local
+# E – Enclosing
+# G – Global
+# B – Built-in
+
+x = "global"
+
+def outer():
+    x = "enclosing"
+
+    def inner():
+        x = "local"
+        print(x)
+
+    inner()
+
+outer()
+
+## Local Scope (Inside Inner Function)
+def outer():
+    def inner():
+        x = 10
+        print(x)
+    inner()
+
+outer()
+
+## Enclosing Scope
+def outer():
+    x = 20
+
+    def inner():
+        print(x)
+
+    inner()
+
+outer()
+
+# Global Scope with Nested Functions
+x = 100
+
+def outer():
+    def inner():
+        print(x)
+    inner()
+
+outer()
+
+# Modifying Enclosing Variable → nonlocal
+# -> If you want to modify a variable from the outer function, use nonlocal.
+def outer():
+    x = 10
+
+    def inner():
+        nonlocal x
+        x = 20
+        print("Inner:", x)
+
+    inner()
+    print("Outer:", x)
+
+outer()
+
+
+# Full Example
+x = "Global"
+
+def outer():
+    x = "Enclosing"
+
+    def inner():
+        x = "Local"
+        print(x)
+
+    inner()
+    print(x)
+
+outer()
+print(x)
+
