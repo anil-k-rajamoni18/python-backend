@@ -1,4 +1,4 @@
-# Python Functions: Complete Session Notes 📚
+# Python Functions📚
 
 ## 1️⃣ What is a Function?
 
