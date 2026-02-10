@@ -105,7 +105,7 @@ result = add(5, 3)  # 5 and 3 are ARGUMENTS
 
 **Types of Parameters:**
 
-**1. Positional Parameters**
+1. **Positional Parameters**
 ```python
 def introduce(name, age, city):
     print(f"{name} is {age} years old and lives in {city}")
@@ -116,7 +116,7 @@ introduce(25, "John", "NYC")  # Wrong - age is string, name is int
 introduce("John", "NYC", 25)  # Wrong - city is int, age is string
 ```
 
-**2. Default Parameters**
+2. **Default Parameters**
 ```python
 def greet(name, greeting="Hello"):
     """Greet with custom message"""
@@ -126,8 +126,7 @@ print(greet("Alice"))  # Hello, Alice!
 print(greet("Bob", "Hi"))  # Hi, Bob!
 print(greet("Charlie", greeting="Hey"))  # Hey, Charlie!
 ```
-
-**3. Keyword Arguments**
+3. **Keyword Arguments**
 ```python
 def create_profile(name, age, city, profession):
     profile = {
@@ -153,7 +152,7 @@ profile2 = create_profile(
 profile3 = create_profile("Alice", 25, profession="Engineer", city="NYC")
 ```
 
-**4. *args (Variable-Length Positional Arguments)**
+4. *args (Variable-Length Positional Arguments)**
 ```python
 def sum_all(*numbers):
     """Sum any number of arguments"""
@@ -183,7 +182,7 @@ print_info("Fruits", "Apple", "Banana", "Orange")
 # 3. Orange
 ```
 
-**5. **kwargs (Variable-Length Keyword Arguments)**
+5. **kwargs (Variable-Length Keyword Arguments)**
 ```python
 def create_user(name, **details):
     """Create user with flexible details"""
@@ -218,7 +217,7 @@ print(button)
 # <button id="btn1" class_="primary" onclick="submit()">Click me</button>
 ```
 
-**6. Combining All Parameter Types**
+6. **Combining All Parameter Types**
 ```python
 def process_data(required, default="value", *args, **kwargs):
     """Function with all parameter types"""
