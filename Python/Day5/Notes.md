@@ -1,5 +1,5 @@
 
-# 🧠 DAY 5 — Python OOP (Expert-Level, In-Depth Notes)
+# 🧠 DAY 5 — Python OOP 
 
 **Object-Oriented Programming (OOP)** enables building modular, scalable, and maintainable systems. Python uses a flexible OOP model that supports:
 
