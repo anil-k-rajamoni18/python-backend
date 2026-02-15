@@ -46,3 +46,74 @@ try:
     register(11)
 except InvalidAgeError as e:
     print(e, "Please pass valid age")
+
+
+
+def process_user_records(records):
+    valid = []
+    invalid = []
+    
+    for i, record in enumerate(records):
+        try:
+            # Try to convert age
+            age = int(record.get("age", ""))
+            
+            # Validate email exists
+            if "email" not in record:
+                raise KeyError("email field missing")
+            
+            # Validate age range
+            if age < 18 or age > 120:
+                raise ValueError(f"Age {age} out of valid range")
+            
+            valid.append(record)
+            
+        except ValueError as e:
+            invalid.append({"index": i, "error": f"Invalid value: {e}"})
+        except KeyError as e:
+            invalid.append({"index": i, "error": f"Missing field: {e}"})
+        except Exception as e:
+            invalid.append({"index": i, "error": f"Unknown error: {e}"})
+    
+    return valid, invalid
+
+# Test
+records = [
+    {"name": "John", "age": "25", "email": "john@email.com"},
+    {"name": "Jane", "age": "abc", "email": "jane@email.com"},  # Invalid age
+    {"name": "Bob", "age": "30"},  # Missing email
+    {"name": "Alice", "age": "150", "email": "alice@email.com"},  # Age out of range
+]
+
+valid, invalid = process_user_records(records)
+print(f"Valid records: {len(valid)}")
+print(f"Invalid records: {len(invalid)}")
+for inv in invalid:
+    print(f"  Record {inv['index']}: {inv['error']}")
+
+
+
+####
+try:
+    api_key = input("Enter API key: ")
+    endpoint = input("Enter endpoint: ")
+    
+    try:
+        response = requests.get(
+            f"https://api.example.com/{endpoint}",
+            headers={"Authorization": f"Bearer {api_key}"}
+        )
+        
+        try:
+            data = response.json()
+            print(f"Data received: {len(data)} records")
+        except json.JSONDecodeError:
+            print("Response is not valid JSON")
+            
+    except requests.ConnectionError:
+        print("Network connection failed")
+    except requests.Timeout:
+        print("Request timed out")
+        
+except KeyboardInterrupt:
+    print("User cancelled operation")
