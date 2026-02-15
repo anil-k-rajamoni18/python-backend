@@ -298,6 +298,7 @@ show()
 count = 0
 
 def increment():
+    global count
     count = count + 1
     print(count)
 
@@ -396,3 +397,133 @@ def outer():
 outer()
 print(x)
 
+
+def login_user(username, password):
+    """Attempt login, return status and message"""
+    if len(password) < 8:
+        return {
+            "success": False,
+            "message": "Password too short"
+        }
+    if username in ["admin", "root"]:
+        return {
+            "success": True,
+            "user_id": 1,
+            "message": "Login successful"
+        }
+    return {
+        "success": False,
+        "message": "Invalid credentials"
+    }
+
+result = login_user("surya", "hello123")
+if result["success"]:
+    print(f"Welcome user {result['user_id']}")
+else:
+    print(f"Error: {result['message']}")
+
+
+
+###
+import re
+from datetime import date
+import random
+def register_user(username, email, password):
+    """
+    Register new user with validation.
+    
+    Returns:
+        dict: Result with status and message
+    """
+    errors = []
+    
+    # Validate username
+    if len(username) < 3:
+        errors.append("Username must be at least 3 characters")
+    
+    # Validate email
+    if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
+        errors.append("Invalid email format")
+    
+    # Validate password
+    if len(password) < 8:
+        errors.append("Password must be at least 8 characters")
+    if not any(c.isupper() for c in password):
+        errors.append("Password must contain uppercase letter")
+    
+    if errors:
+        return {"success": False, "errors": errors}
+    
+    return {
+        "success": True,
+        "user": {
+            "userId": "USR" + str(random.randint(1,100)),
+            "username": username,
+            "email": email,
+            "created_at": date.today().strftime("%Y-%m-%d")
+        }
+    }
+
+# Test
+result = register_user("alice", "alice@example.com", "Password123")
+print(result)
+
+def sum_of_n_numbers(n):
+    """Calculate sum of n numbers recursively"""
+    if n <= 1:  # BASE CASE
+        return 1
+    return n + sum_of_n_numbers(n - 1)  # RECURSIVE CALL
+
+n=100
+print(f"sum of numbers of {n} = {sum_of_n_numbers(n)}")
+
+
+## 
+
+def my_decorator(func):
+    """Decorator that prints function name and arguments"""
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}")
+        print(f"Arguments: {args}, {kwargs}")
+        result = func(*args, **kwargs)
+        print(f"Returned: {result}")
+        return result
+    return wrapper
+
+@my_decorator
+def add(a, b):
+    """Add two numbers"""
+    return a + b
+
+add(5, 3)
+
+##
+import time
+
+def timer_decorator(func):
+    """Measure execution time of function"""
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end - start:.4f} seconds")
+        return result
+    return wrapper
+
+@timer_decorator
+def slow_function():
+    """Simulate slow operation"""
+    # time.sleep(2)
+    return "Done"
+
+slow_function()
+
+@timer_decorator
+def sum_of_numbers(num: int) -> int:
+    sum:int = 0
+    for i in range(1, num+1):
+        sum = sum + i
+    return sum
+
+num=5000000
+print(f"Sum of N {num}s = {sum_of_numbers(num)}")
