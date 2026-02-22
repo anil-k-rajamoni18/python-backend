@@ -306,3 +306,78 @@ Create: **`Product(name, price)`**
   * **Base:** `Rule` $\to$ `evaluate(transaction)`
   * **Implement:** `HighAmountRule`, `CountryMismatchRule`, `VelocityRule`
 
+
+
+---
+
+---
+
+## 🏗️ Beginner — OOP Fundamentals in Design
+
+**1. Design a Library Management System**
+Model books, members, and borrowing. Practice classes, inheritance, encapsulation. Implement `borrow_book()`, `return_book()`, `search_by_author()`.
+
+**2. Design a Parking Lot**
+Classic OOP problem. Model different vehicle types, parking spots, and a ticket system. Think about inheritance (`Car`, `Bike`, `Truck` → `Vehicle`) and single responsibility.
+
+**3. Design a Bank Account System**
+Model `SavingsAccount`, `CurrentAccount` inheriting from `BankAccount`. Implement deposit, withdrawal, transfer, and transaction history. Practice polymorphism.
+
+**4. Design a Zoo**
+Model animals with different `speak()` and `move()` behaviors. Practice abstract classes and interfaces via Python's `ABC` module.
+
+---
+
+## ⚙️ Intermediate — Real-World System Design
+
+**5. Design a Shopping Cart / E-Commerce System**
+Model `User`, `Product`, `Cart`, `Order`, `Payment`. Apply OOP relationships — composition vs inheritance, and design patterns like Strategy (for payment methods).
+
+**6. Design a Hotel Booking System**
+Model rooms, bookings, guests, and availability. Focus on encapsulation of booking logic, date conflict detection, and room types.
+
+**7. Design a Ride-Sharing App (Uber-lite)**
+Model `Driver`, `Rider`, `Trip`, `Location`. Practice state management (trip states: requested → accepted → ongoing → completed) and Observer pattern.
+
+**8. Design an ATM Machine**
+Model card authentication, balance check, cash dispensing, and receipt. Strong focus on state design pattern and encapsulation of machine states.
+
+**9. Design a Movie Ticket Booking System (BookMyShow-lite)**
+Model `Movie`, `Theatre`, `Screen`, `Seat`, `Booking`. Handle seat locking, concurrency concept (even at design level), and payment.
+
+---
+
+## 🚀 Advanced — Design Patterns + Architecture
+
+**10. Design a Notification System**
+Support Email, SMS, Push notifications. Practice the **Observer** and **Strategy** design patterns. Make it extensible to add new channels without changing existing code.
+
+**11. Design a File System**
+Model files and folders recursively. Classic **Composite** design pattern problem. Implement `ls`, `mkdir`, `search`, and `get_size()`.
+
+**12. Design a Cache System (LRU Cache)**
+Implement an LRU cache using OOP. Use `OrderedDict` internally. Practice encapsulation and hiding implementation details behind a clean interface.
+
+**13. Design a Task Queue / Job Scheduler**
+Model jobs with priorities, workers, and a scheduler. Practice **Producer-Consumer** pattern, state machines, and queue-based design.
+
+**14. Design a Logging Framework (like Python's `logging`)**
+Build your own from scratch — `Logger`, `Handler`, `Formatter`, log levels. This is a meta-exercise that reinforces everything you've already learned about logging.
+
+---
+
+## 🧭 How to Approach Each Problem
+
+For every question, follow this structure:
+
+```
+1. Clarify requirements     → What are the core features? Constraints?
+2. Identify entities        → What are the main nouns? (these become classes)
+3. Define relationships     → Inheritance? Composition? Association?
+4. Define interfaces        → What methods does each class expose?
+5. Code the skeleton        → Classes, attributes, method signatures
+6. Implement logic          → Fill in the methods
+7. Test with a scenario     → Write a small main() to simulate usage
+```
+
+---

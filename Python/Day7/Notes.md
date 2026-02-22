@@ -1,7 +1,5 @@
 # DAY 7 — Advanced Python Concepts (In-Depth Notes)
 
-
-
 ---
 
 ## 🔥 1. Iterators & Generators (Memory-Efficient Programming)
