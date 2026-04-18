@@ -1,9 +1,6 @@
 # Hanuman Sports Academy — Court Booking Calendar System
 ## Development Plan v1.0
 
-> **Based on:** BRD v1.0 | **Prepared by:** Full Stack Review  
-> **Date:** April 2026 | **Status:** Draft
-
 ---
 
 ## Table of Contents
