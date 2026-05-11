@@ -1,4 +1,4 @@
-# 🐍 Python — Day 1 Master Notes
+# 🐍 Python — Day 1 Notes
 ---
 
 ## Table of Contents
