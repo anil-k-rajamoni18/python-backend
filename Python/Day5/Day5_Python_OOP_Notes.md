@@ -1,6 +1,4 @@
-# 🐍 DAY 5 — Python OOP: Object-Oriented Programming Complete Guide
-
-> OOP is not about writing classes — it's about modelling the real world in code. When done right, your software reads like the domain it represents. A `BankAccount` that can `deposit()` and `withdraw()` is infinitely more maintainable than a bag of disconnected functions and dictionaries.
+# 🐍 DAY 5 — Python OOP: Object-Oriented Programming 
 
 ---
 
@@ -1617,5 +1615,3 @@ GOLDEN RULES
 ```
 
 ---
-
-*Day 5 Notes — Python OOP: Classes, Inheritance, Polymorphism, Encapsulation, Abstraction | Consolidated & Expanded*
