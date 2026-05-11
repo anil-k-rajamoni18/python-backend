@@ -1,7 +1,4 @@
 # 🐍 DAY 4 — Functions, Functional Tools & Error Handling
-
-> Writing code that works once is easy. Writing code that's reusable, testable, and doesn't blow up in production — that's what Day 4 is about. Functions are the unit of reuse; error handling is the unit of trust.
-
 ---
 
 ## 📌 Table of Contents
