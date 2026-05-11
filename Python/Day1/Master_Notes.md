@@ -1,7 +1,4 @@
 # 🐍 Python — Day 1 Master Notes
-
-> Consolidated from Notes-1 & Notes-2 | Enhanced with internals, real-world examples, and diagrams
-
 ---
 
 ## Table of Contents
