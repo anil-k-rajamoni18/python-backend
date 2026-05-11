@@ -1,6 +1,4 @@
-# 🐍 DAY 3 — Python Data Structures: The Complete Guide
-
-> Python's data structures are the backbone of everything you build — APIs, ML pipelines, ETL workflows, databases, and automation systems. Mastering them is not optional; it's the difference between writing code that works and code that scales.
+# 🐍 DAY 3 — Python Data Structures 
 
 ---
 
