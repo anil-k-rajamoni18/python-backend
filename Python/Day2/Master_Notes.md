@@ -1,7 +1,4 @@
-# 🐍 Python — Day 2 Master Notes
-
-> Control Flow, Loops, Comprehensions | Enhanced with internals, real-world examples, info diagrams, and edge cases
-
+# 🐍 Python — Day 2 Notes
 ---
 
 ## Table of Contents
