@@ -1,7 +1,4 @@
-# 🐍 Python — Day 6 Master Notes
-
-> Files, Modules, Packages, Virtual Environments, Logging, HTTP Requests  
-> Enhanced with internals, real-world patterns, production practices, and complete exercises
+# 🐍 Python — Day 6 Notes
 
 ---
 
@@ -1757,5 +1754,3 @@ LOGGING LEVELS (low → high):
 | `if __name__ == "__main__":` | Importable + runnable module |
 
 ---
-
-*Notes compiled for SDE Track — Python Full Stack | Day 6*
