@@ -1,52 +1,60 @@
 # .github/prompts — SRE Prompt Library
 
-This directory contains reusable prompt files for daily SRE workflows. Use these with GitHub Copilot Chat, Claude, or any AI assistant that supports `.prompt.md` files.
+Reusable AI prompt files for daily SRE work. Compatible with GitHub Copilot Chat, Claude, or any assistant supporting `.prompt.md` files.
+
+## My Setup
+- **Role**: SRE Engineer
+- **Responsibilities**: Vulnerability remediation · CI/CD pipeline health (One Pipeline) · Cloud infra (AWS/Azure/GCP) · Secret rotation & compliance · Incident response & on-call
+- **Tools**: Slack · Jira · One Pipeline · Secure Guardians · ETIP · Ozone · QuickSight · Confluence
+
+---
 
 ## Prompt Files
 
-| File | Purpose | When to Use |
-|------|---------|-------------|
-| `sre-daily-tasks.prompt.md` | Morning triage, SLA checks, vulnerability prioritization | Every morning / ad hoc during shift |
-| `slack-message-composer.prompt.md` | Craft Slack messages for SLA alerts, escalations, FYIs | Whenever you need to post to the team |
-| `scrum-standup-generator.prompt.md` | Convert task notes into standup updates | Before daily standup / async post |
-| `vuln-triage-jira-tickets.prompt.md` | Prioritize findings, generate Jira tickets, suppression requests | When processing new vulnerability batches |
-| `incident-response-comms.prompt.md` | Incident Slack updates, post-mortem template, security incidents | During and after incidents |
+| File | Purpose | Use When |
+|------|---------|----------|
+| `sre-daily-tasks.prompt.md` | Morning checklist — pipeline health, vuln triage, secret health, cloud infra | Every morning, start of shift |
+| `slack-message-composer.prompt.md` | 9 Slack templates for SLA alerts, escalations, incidents, FYIs | Before posting anything to the team |
+| `scrum-standup-generator.prompt.md` | Convert raw task notes → clean daily standup (verbal or Slack) | Before daily standup |
+| `vuln-triage-jira-tickets.prompt.md` | Prioritize findings (P0–P4), generate Jira tickets for all vuln types | Processing new vuln batches from Secure Guardians |
+| `incident-response-comms.prompt.md` | Incident Slack comms, status updates, post-mortem/PIR template | During and after incidents |
 
 ---
 
 ## Quick Usage
 
-### In VS Code with GitHub Copilot:
-Attach the relevant prompt file to your Copilot Chat context, then describe your task.
+### Standup (fastest daily use)
+Paste `scrum-standup-generator.prompt.md` into Claude, then:
+> "Done: triaged 5 container vulns, rotated 2 secrets, fixed pipeline failure on auth-service. Today: EOL review, config compliance sweep. Blockers: none."
 
-### With Claude:
-Paste the relevant prompt file content at the start of your conversation, then provide your specific task inputs.
+Get a clean Slack standup post in seconds.
 
-### Example — Standup:
-1. Open `scrum-standup-generator.prompt.md`
-2. Paste into Claude
-3. Then type: *"Done: triaged 5 container vulns, rotated 2 secrets. Today: EOL review for NodeJS services. Blockers: none."*
-4. Get a clean standup in seconds.
+### Slack Message
+Paste `slack-message-composer.prompt.md`, then:
+> "Write me a message for a SAST block on payments-service, Jira ticket PAY-1234, dev owner is @alice"
+
+### Jira Ticket
+Paste `vuln-triage-jira-tickets.prompt.md`, then:
+> "Container finding: checkout-service, image node:16, 3 critical CVEs, 28 days old, SG ticket #4521"
 
 ---
 
-## Vulnerability Types Quick Reference
+## SLA Quick Reference
 
-| SLA | Types |
-|-----|-------|
-| Resolve ASAP | CONFIG COMPLIANCE |
-| Blocks release | SAST / CHECKMARX |
-| 30-day window | CONTAINERS, IMAGE FINDINGS |
-| Every 90 days | SECRET ROTATION |
-| Continuous | SCA / MEND |
-| Monitor weekly | API DORMANCY |
-| Per EOL date | EOL SOFTWARE |
-| 90-day lead | ETBS |
-| 100% target | SCA/SAST ONBOARDING |
-| Annual minimum | DAST |
+| SLA | Vulnerability Types |
+|-----|---------------------|
+| 🔴 Resolve ASAP | CONFIG COMPLIANCE |
+| 🔴 Blocks release | SAST / CHECKMARX |
+| 🔴 Every 90 days | SECRET ROTATION |
+| 🟠 30-day window | CONTAINERS, IMAGE FINDINGS |
+| 🟠 Continuous | SCA / MEND |
+| 🟡 Per EOL date | EOL SOFTWARE |
+| 🟡 90-day lead | ETBS |
+| 🟢 Monitor weekly | API DORMANCY |
+| 🟢 Annual minimum | DAST |
+| 🟢 100% target | SCA/SAST ONBOARDING |
 
 ---
 
 ## Contributing
-
-When you discover new patterns or team conventions, update the relevant prompt file. Keep templates grounded in actual SLAs and tool names from this org.
+When you discover new team conventions, tool changes, or channel names — update the relevant prompt file. Keep everything grounded in actual SLAs and tools from this org.

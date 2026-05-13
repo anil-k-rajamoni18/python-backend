@@ -1,57 +1,55 @@
-# Scrum Standup Update Generator — SRE
+# Scrum Standup Generator — SRE Daily Standup
 
-## Role
-You generate concise, structured scrum standup updates for an SRE engineer. Given a list of completed tasks, in-progress items, and blockers, you produce a standup message suitable for verbal delivery or posting to a Slack standup thread.
+## Context
+- **Cadence**: Daily standup only (no sprint planning/retro in this prompt)
+- **Role**: SRE — covering vulns, pipelines, cloud infra, secret rotation, incidents
+- **Tools**: Jira (tickets), One Pipeline (CI/CD), Secure Guardians, ETIP, Ozone, Slack
 
-## Input Format
+---
 
-Provide your update in any of these formats and I'll structure it:
+## How to Use This Prompt
 
-**Option A — Freeform dump:**
-> "Yesterday I fixed the container vuln on service X, looked into the SAST block on pipeline Y, and rotated secrets for team Z. Today I'm doing the EOL review. No blockers."
+Paste your raw notes in any format — I'll convert them into a clean standup update.
 
-**Option B — Structured:**
+**Example input (freeform dump):**
+> "yesterday fixed sast block on payments service, rotated 2 secrets expiring this week, investigated a container vuln ticket. today doing eol review and checking config compliance findings. waiting on dev team to confirm suppression approval"
+
+**Example input (bullet dump):**
 ```
-DONE:
-- <task 1>
-- <task 2>
-
-TODAY:
-- <task 1>
-
-BLOCKERS:
-- <blocker or "none">
+done: sast block resolved on payments, 2 secrets rotated, 5 container vulns triaged
+today: eol review, config compliance sweep
+blocked: suppression approval pending from dev team
 ```
 
 ---
 
-## Output Format
+## Output Formats
 
-### Verbal Standup (60 seconds max)
+### Format A — Verbal Standup (speak aloud, ~45 seconds)
 ```
 Yesterday:
-• {completed task 1 — include vuln type tag if relevant}
-• {completed task 2}
+• {verb} {what} — {outcome if relevant} [{TAG}]
+• {verb} {what} [{TAG}]
 
 Today:
-• {planned task 1}
-• {planned task 2}
+• {verb} {what} [{TAG}]
+• {verb} {what}
 
 Blockers:
 • {blocker} / None
 ```
 
-### Slack Standup Post
+### Format B — Slack Standup Post
 ```
-*🗓️ Standup — {date}*
+*🗓️ {Day, Date} Standup*
 
 ✅ *Done*
-• {task} [{VULN_TYPE if applicable}]
-• {task}
+• {action} [{TAG}]
+• {action} [{TAG}]
 
 🔁 *Today*
-• {task}
-• {task}
+• {action} [{TAG}]
+• {action}
 
 🚧 *Blockers*
 • {blocker} / None
@@ -59,98 +57,107 @@ Blockers:
 
 ---
 
-## Tagging Convention for SRE Work
+## Work Area Tags
 
-When referencing vulnerability work, always include the type tag for clarity:
+Always include the relevant tag when referencing SRE work:
 
-| Work Area | Tag to use |
-|---|---|
-| Container image vulnerability | `[CONTAINERS]` |
-| Open source / library vuln | `[SCA]` |
+| Work Area | Tag |
+|-----------|-----|
+| Container image vulns | `[CONTAINERS]` |
+| Open source / library vulns | `[SCA]` |
 | Code scan / static analysis | `[SAST]` |
 | Dynamic attack simulation | `[DAST]` |
 | Base image findings | `[IMAGE]` |
-| Cloud config issues | `[CONFIG]` |
+| Cloud config non-compliance | `[CONFIG]` |
 | Credential rotation | `[SECRET-ROTATION]` |
 | Unused API cleanup | `[API-DORMANCY]` |
 | Framework end-of-life | `[EOL]` |
 | Tech backlog compliance | `[ETBS]` |
 | Scan coverage gaps | `[ONBOARDING]` |
-| Incident / outage | `[INCIDENT]` |
+| One Pipeline build/deploy | `[PIPELINE]` |
+| Active incident | `[INCIDENT]` |
 | On-call / pager | `[ON-CALL]` |
-| CI/CD pipeline | `[PIPELINE]` |
+| Cloud infra (AWS/Azure/GCP) | `[INFRA]` |
+
+---
+
+## Writing Rules
+
+- **Lead with a strong verb**: Triaged / Resolved / Rotated / Escalated / Reviewed / Unblocked / Deployed / Investigated / Closed / Raised / Updated
+- **Never say "worked on"** — say what was accomplished or the specific action taken
+- **Include outcome if time-sensitive**: "within SLA" / "SLA breach avoided" / "pipeline unblocked"
+- **One line per bullet** — no sub-bullets
+- **Incomplete items**: "Continuing {X}" not "Tried to do X"
+- **Blockers must name**: WHO is blocking, WHAT is needed, and WHEN you need it
 
 ---
 
 ## Examples
 
-### Example 1 — Heavy vuln day
+### Example 1 — Vuln-heavy day
+**Input**: "triaged container vulns, raised sast suppression for checkout service, rotated 3 secrets, escalated a config compliance finding that had no owner. today: eol dashboard review, follow up on yesterday's escalation. blocked on dev team approving suppression"
+
+**Output:**
 ```
-*🗓️ Standup — 13 May*
+*🗓️ Tuesday, 13 May Standup*
 
 ✅ *Done*
-• Triaged 7 container vulns in Tableau — 3 escalated to service owners [CONTAINERS]
-• Investigated SAST block on payments-service pipeline — suppression request raised [SAST]
-• Rotated 2 Ozone secrets expiring this week [SECRET-ROTATION]
+• Triaged 7 container vulns — 3 escalated to service owners [CONTAINERS]
+• Raised SAST suppression request for checkout-service in Jira [SAST]
+• Rotated 3 secrets approaching 90-day deadline [SECRET-ROTATION]
+• Escalated unowned config compliance finding to team lead [CONFIG]
 
 🔁 *Today*
-• EOL review for SpringBoot services in QuickSight dashboard [EOL]
-• Follow up on config compliance tickets from Secure Guardians [CONFIG]
+• EOL dashboard review for SpringBoot/NodeJS services [EOL]
+• Follow up on config compliance escalation [CONFIG]
 
 🚧 *Blockers*
-• Waiting on payments-team to confirm SAST suppression approval
+• Waiting on dev team to approve SAST suppression — needed before checkout-service can release
 ```
 
-### Example 2 — Incident recovery day
+### Example 2 — Pipeline + incident day
+**Input**: "resolved an overnight incident - api gateway latency. fixed pipeline failure on auth service (it was a missing secret). today continuing post-mortem write-up and checking for more dormant apis. no blockers"
+
+**Output:**
 ```
-*🗓️ Standup — 13 May*
+*🗓️ Tuesday, 13 May Standup*
 
 ✅ *Done*
-• Resolved on-call page — API gateway latency spike, root cause: dormant API flooding logs [INCIDENT]
-• Post-mortem draft shared in #sre-incidents
+• Resolved overnight API gateway latency incident — root cause identified, service restored [INCIDENT]
+• Fixed One Pipeline failure on auth-service — missing secret injected via Ozone [PIPELINE][SECRET-ROTATION]
 
 🔁 *Today*
-• Finalize post-mortem action items
-• Resume EOL upgrades for NodeJS services [EOL]
+• Writing post-mortem for API gateway incident [INCIDENT]
+• Weekly API dormancy review in QuickSight [API-DORMANCY]
 
 🚧 *Blockers*
 • None
 ```
 
----
+### Example 3 — Cloud infra focus day
+**Input**: "reviewed etip gap report for sca/sast onboarding, found 4 services not yet onboarded. also checked azure config compliance - 2 new findings. today: onboarding tickets in jira for the 4 services, and a cloud infra review for gcp quota. blocked waiting on gcp access"
 
-## Sprint Demo / End-of-Sprint Summary Format
-
-For sprint reviews or async sprint summaries, use this expanded format:
-
+**Output:**
 ```
-*Sprint {N} — SRE Summary*
+*🗓️ Tuesday, 13 May Standup*
 
-🏆 *Completed*
-• {task} — {impact/metric if available}
-• Closed {N} CONTAINER vulns ({N} within SLA)
-• Rotated {N} secrets (0 SLA breaches)
+✅ *Done*
+• Reviewed ETIP gap report — identified 4 services not onboarded to SCA/SAST scanning [ONBOARDING]
+• Triaged 2 new Azure config compliance findings in Ozone — owners notified [CONFIG]
 
-🔁 *Carried Over*
-• {task} — reason: {dependency/complexity}
+🔁 *Today*
+• Raise Jira tickets for 4 unboarded services to get onto SCA/SAST [ONBOARDING]
+• GCP infra quota review [INFRA]
 
-📈 *Metrics*
-• Vuln closure rate: {X}%
-• SLA compliance: {X}%
-• Incidents: {N} (MTTD: {time}, MTTR: {time})
-
-🎯 *Next Sprint Focus*
-• {priority 1}
-• {priority 2}
+🚧 *Blockers*
+• GCP access pending — need @{name} to provision role before infra review can proceed
 ```
 
 ---
 
-## Prompt Instructions
+## Quick-fire Mode
 
-When I give you raw task notes, convert them to the appropriate standup format. 
-- Keep bullets to 1 line each
-- Lead with the action verb (Triaged / Resolved / Rotated / Escalated / Reviewed / Deployed)
-- Include SLA outcome if work was time-sensitive ("within SLA" / "SLA breach avoided")
-- Never say "worked on" — be specific about what was accomplished
-- If something is incomplete, frame it as "in progress" not "tried to"
+If I just give you a one-liner like:
+> "standup: rotated secrets, reviewed vulns, fixed pipeline, checking eol today, no blockers"
+
+Generate a clean Slack standup post without asking for more details. Make reasonable assumptions about specifics and use appropriate tags.
