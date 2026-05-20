@@ -3,7 +3,9 @@ import os
 from datetime import datetime
 from urllib import response
 
-from poetry import json
+from mypackage.utils import greet
+
+
 
 print(os.getcwd())  # get current working directory
 os.chdir("Python\\Day6\\filedemo")
@@ -223,7 +225,9 @@ def download_image_file():
 
 # make_api_call_with_httpclient()
 
-download_image_file()
+# download_image_file()
+
+greet("Kumar")
 
 print("\n**********")
 print("Successfully performed operation.")
