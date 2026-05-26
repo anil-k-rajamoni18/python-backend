@@ -1,0 +1,12 @@
+2026-05-26 06:31:15 — INFO     — __main__ — Application started successfully
+2026-05-26 06:31:15 — WARNING  — __main__ — Cache size approaching limit: 950/1000
+2026-05-26 06:31:15 — ERROR    — __main__ — Failed to send email to user@example.com
+2026-05-26 06:31:15 — CRITICAL — __main__ — Redis connection lost — caching disabled
+2026-05-26 06:33:16 — INFO     — __main__ — Application started successfully
+2026-05-26 06:33:16 — WARNING  — __main__ — Cache size approaching limit: 950/1000
+2026-05-26 06:33:16 — ERROR    — __main__ — Failed to send email to user@example.com
+2026-05-26 06:33:16 — CRITICAL — __main__ — Redis connection lost — caching disabled
+2026-05-26 06:33:37 — INFO     — __main__ — Application started successfully
+2026-05-26 06:33:37 — WARNING  — __main__ — Cache size approaching limit: 950/1000
+2026-05-26 06:33:37 — ERROR    — __main__ — Failed to send email to user@example.com
+2026-05-26 06:33:37 — CRITICAL — __main__ — Redis connection lost — caching disabled

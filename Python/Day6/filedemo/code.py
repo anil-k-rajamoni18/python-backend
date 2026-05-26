@@ -5,10 +5,10 @@ from urllib import response
 
 from mypackage.utils import greet
 
-
+ 
 
 print(os.getcwd())  # get current working directory
-os.chdir("Python\\Day6\\filedemo")
+# os.chdir("Python\\Day6\\filedemo")
 
 print(os.getcwd())
 
@@ -231,3 +231,26 @@ greet("Kumar")
 
 print("\n**********")
 print("Successfully performed operation.")
+
+####
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s — %(levelname)-8s — %(name)s — %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.FileHandler("app.log", encoding="utf-8"),
+        logging.StreamHandler()    # also print to console
+    ]
+)
+
+logger = logging.getLogger(__name__)
+# __name__ is the module name — e.g. "sproxhrms.services.auth_service"
+# This creates a logger hierarchy, not a flat global logger
+
+logger.debug("Starting configuration load")
+logger.info("Application started successfully")
+logger.warning("Cache size approaching limit: 950/1000")
+logger.error("Failed to send email to user@example.com")
+logger.critical("Redis connection lost — caching disabled")
